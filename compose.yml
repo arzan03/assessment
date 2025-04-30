@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  yii2-app:
+    image: "app:latest"
+    build: .
+    ports:
+      - "8080:8080"
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
