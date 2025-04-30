@@ -61,14 +61,16 @@ jobs:
                 echo "Waiting for deployment to stabilize..."
                 sleep 10
 
-                if ! docker service ps ${{ secrets.APP_NAME }} --no-trunc --filter 'desired-state=shutdown' | grep -q "Exit 0"; then
+                if docker service ps ${{ secrets.APP_NAME }} --no-trunc --filter 'desired-state=shutdown' | grep -q 'Error'; then
                     echo "Deployment failed. Rolling back..."
                     if [ -n "$OLD_DIGEST" ]; then
-                    docker service update --image "$OLD_DIGEST" --force ${{ secrets.APP_NAME }}
+                        docker service update --image "$OLD_DIGEST" --force ${{ secrets.APP_NAME }}
                     else
-                    echo "No previous digest found. Manual rollback required."
+                        echo "No previous digest found. Manual rollback required."
                     fi
                     exit 1
+                else
+                    echo "Deployment successful."
                 fi
 
                 echo "Service update successful."

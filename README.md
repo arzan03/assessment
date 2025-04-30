@@ -19,12 +19,12 @@
 - After provisioning, navigate to the server’s domain or IP on port 80 (reverse-proxy) or 8080 directly to see the Yii2 app running.
 - Check logs via Docker or systemd for any errors.
 - Manually verify key pages (home, about, contact) to confirm backend functionality.
-- You can also verify Prometheus by checking http://<server-ip>:9090 for metrics and alerts.
+- You can also verify Prometheus by checking http://server-ip:9090 for metrics and alerts.
 
 ## Monitoring
 Prometheus is running with a node exporter. You can check metrics at:
-- http://<server-ip>:9090 for Prometheus
-- http://<server-ip>:9100/metrics for node exporter
+- http://server-ip:9090 for Prometheus
+- http://server-ip:9100/metrics for node exporter
 
 ## Tasks
 ### 1. Application Deployment
