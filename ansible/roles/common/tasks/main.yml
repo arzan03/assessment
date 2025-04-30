@@ -1,0 +1,4 @@
+- name: Install base packages
+  apt:
+    name: [git, curl, unzip, php-cli, php-mysql, php-zip, php-mbstring, php-xml, php-curl]
+    update_cache: true

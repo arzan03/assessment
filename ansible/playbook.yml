@@ -1,0 +1,10 @@
+- name: Provision and deploy Yii2 app
+  hosts: web
+  become: true
+
+  roles:
+    - common
+    - docker
+    - nginx
+    - app
+    - monitoring

@@ -1,0 +1,40 @@
+- name: Install Docker
+  apt:
+    name: [apt-transport-https, ca-certificates, curl, gnupg, lsb-release]
+    update_cache: true
+
+- name: Add Docker GPG key
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+- name: Add Docker repo
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+
+- name: Install Docker Engine
+  apt:
+    name: [docker-ce, docker-ce-cli, containerd.io]
+    update_cache: true
+
+- name: Install Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Enable and start Docker
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Initialize Docker Swarm if not already initialized
+  shell: |
+    docker info | grep -q "Swarm: active" || docker swarm init
+  args:
+    executable: /bin/bash

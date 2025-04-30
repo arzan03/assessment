@@ -1,0 +1,9 @@
+- name: Deploy Swarm service
+  shell: |
+    docker pull arzan03/yii2-app:latest
+
+    if docker service ls | grep -q yii2-app; then
+      docker service update --image arzan03/yii2-app:latest --force yii2-app
+    else
+      docker service create --name yii2-app -p 8080:8080 arzan03/yii2-app:latest
+    fi

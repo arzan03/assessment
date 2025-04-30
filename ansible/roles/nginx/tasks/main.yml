@@ -1,0 +1,26 @@
+- name: Install NGINX
+  apt:
+    name: nginx
+    update_cache: yes
+
+- name: Configure reverse proxy
+  template:
+    src: ../../../../nginx.conf
+    dest: /etc/nginx/sites-available/yii2
+
+- name: Enable site
+  file:
+    src: /etc/nginx/sites-available/yii2
+    dest: /etc/nginx/sites-enabled/yii2
+    state: link
+    force: true
+
+- name: Remove default config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Restart NGINX
+  service:
+    name: nginx
+    state: restarted

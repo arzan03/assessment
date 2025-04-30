@@ -1,0 +1,29 @@
+- name: Deploy Node Exporter
+  docker_container:
+    name: node-exporter
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
+    state: started
+    restart_policy: always
+
+- name: Create Prometheus config directory
+  file:
+    path: /opt/prometheus
+    state: directory
+    mode: '0755'
+
+- name: Deploy Prometheus (basic)
+  copy:
+    src: prometheus.yml
+    dest: /opt/prometheus/prometheus.yml
+    force: yes
+
+- name: Deploy Prometheus container
+  shell: |
+    docker rm -f prometheus || true
+    docker run -d \
+      --name prometheus \
+      --network=host \
+      -v /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+      prom/prometheus
